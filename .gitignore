@@ -130,3 +130,7 @@ dmypy.json
 
 # VsCode Editor
 .vscode/
+
+# Json config file
+ 
+*.json 
