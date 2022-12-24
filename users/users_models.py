@@ -28,6 +28,7 @@ def load_users (path) -> list:
 
     return users_list
 
+
 def search_user(id, users_list):
     current_user = list(filter(lambda user: user.id == id, users_list))
     try:
