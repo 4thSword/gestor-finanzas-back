@@ -1,37 +1,32 @@
+from fastapi import Depends, HTTPException, status
 from pydantic import BaseModel
+from pydantic import BaseModel
+from jose import jwt, JWTError
+from secrets import token_hex
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import json
 import os
 
+ALGORITHM = "HS256"
+ACCESS_TOKEN_DURATION = 1
+SECRET = token_hex(32)
+
 class User(BaseModel):
     id: int
-    name: str
-    surname: str
+    username: str
+    full_name: str
     mail: str
-    passwd: str
+    disable: bool
 
 
-def load_users (path) -> list:
-    users_list = []
+class UserDB(User):
+    password: str
+
+
+
+def load_users (path) -> json:
     abspath = os.path.abspath(path)
     with open(abspath, "r") as users_file:
         file_contents = users_file.read()
   
-    parsed_json = json.loads(file_contents)
-    for user in parsed_json:
-        users_list.append(User(id=user["id"], 
-                               name=user["name"], 
-                               surname=user["surname"],
-                               mail=user['mail'],
-                               passwd=user["passwd"]
-                               )
-                         )
-
-    return users_list
-
-
-def search_user(id, users_list):
-    current_user = list(filter(lambda user: user.id == id, users_list))
-    try:
-        return current_user[0]
-    except:
-        return None
+    return json.loads(file_contents)

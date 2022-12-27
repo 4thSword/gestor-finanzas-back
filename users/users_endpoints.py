@@ -1,10 +1,10 @@
 
 from fastapi import APIRouter, HTTPException
-from users.users_models import load_users, search_user, User
+from users.users_models import *
 
 
 # A json file with tests data is created before database implementation
-users_list = load_users("./constants/users.json")
+users_list = load_users("./constants/auth_users.json")
 
 
 # Router definition
