@@ -1,11 +1,11 @@
 from fastapi import FastAPI
-
+from setup import setup
 from users import users_endpoints, jwt_auth
 from labels import labels_endpoints
 
 
 # API context creation
-app = FastAPI(title="Gestor-Finanzas API", version="0.0.1")
+app = FastAPI(title="Gestor-Finanzas API", version=setup.version)
 
 
 # Router

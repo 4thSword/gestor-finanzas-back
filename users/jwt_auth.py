@@ -57,7 +57,6 @@ async def login(form: OAuth2PasswordRequestForm = Depends()):
             detail='Usuario incorrecto'
             )
     user = search_user_db(form.username)
-    print(user)
     if not crypt.verify(form.password, user.password):
         raise HTTPException(
             status_code=400, 
