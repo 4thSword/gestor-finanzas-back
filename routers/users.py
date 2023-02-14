@@ -1,40 +1,38 @@
 
 from fastapi import APIRouter, HTTPException
-from users.users_models import *
+from db.models.users import *
 
 
 # A json file with tests data is created before database implementation
-users_list = load_users("./constants/auth_users.json")
-
 
 # Router definition
-router = APIRouter(prefix="/users", tags=["Users"])
+router = APIRouter(prefix="/user", tags=["Users"])
 
 
 # Users CRUD
-@router.get("/list/", response_model=list[User])
-async def list_users():
-    return users_list
 
-
-@router.get("/user/", response_model=User, status_code=200)
+@router.get("/", response_model=User, status_code=200)
 async def get_user(id: int):
-    return search_user(id, users_list)
+    user_model = UserModel()
+    return user_model.search_user(id)
 
 
-@router.post("/user/", response_model=User, status_code=200)
+@router.post("/", response_model=User, status_code=200)
 async def add_user(user: User):
-    if type(search_user(user.id)) == User:
+    user_model = UserModel()
+    
+    if type(user_model.search_user(user.id)) == User:
         raise HTTPException(404, detail=f"El usuario {user.id} ya existe")
         
     else:
-        users_list.append(user)
+        user_model.add_user()
         return user
 
 
-@router.put("/user/", response_model=User, status_code=200)
+@router.put("/", response_model=User, status_code=200)
 async def update_user(user: User):
-    if not type(search_user(user.id)) == User:
+    user_model = UserModel()
+    if not type(user_model.search_user(user.id)) == User:
         raise HTTPException(404, detail=f"El usuario {user.id} no existe")
     else:
         for index, saved_user in enumerate(users_list):
@@ -43,7 +41,7 @@ async def update_user(user: User):
                 return user
 
 
-@router.delete("/user/{id}", response_model=User, status_code=200)
+@router.delete("/{id}", response_model=User, status_code=200)
 async def delete_user(id: int):
     if not type(search_user(id)) == User:
         raise HTTPException(404, detail=f"El usuario {id} no existe")
