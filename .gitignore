@@ -137,3 +137,5 @@ dmypy.json
 
 # carpeta test excluida temporalmente
 tests/*
+
+.idea
